@@ -48,3 +48,10 @@ def cql_table_pk_columns(cql_session, ks_name, table):
         return partition_key_cols, clustering_key_cols
     else:
         return None, None
+
+def cql_table_column(cql_session, ks_name, table, column):
+    metadata = cql_table_metadata(cql_session, ks_name, table)
+    if metadata:
+        return metadata.columns.get(column, None)
+    else:
+        return None
