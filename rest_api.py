@@ -65,6 +65,11 @@ class RESTApiV1:
         error = build_resp_error(resp)
         return RESTResult(ok=resp.ok, value=resp.json(), status_code=resp.status_code, error=error, url=resp.url)
 
+    def _delete(self, resource):
+        resp = self.session.delete(self.url(resource))
+        error = build_resp_error(resp)
+        return RESTResult(ok=resp.ok, value=None, status_code=resp.status_code, error=error, url=resp.url)
+
     def list_keyspaces(self):
         return self._get('/keyspaces')
 
@@ -78,3 +83,8 @@ class RESTApiV1:
         pk = ';'.join([str(x) for x in pk_values])
         resource = '/keyspaces/{ks}/tables/{t}/rows/{pk}'.format(ks=ks_name, t=table, pk=pk)
         return self._get(resource)
+
+    def delete_table_rows_by_pk(self, ks_name, table, pk_values):
+        pk = ';'.join([str(x) for x in pk_values])
+        resource = '/keyspaces/{ks}/tables/{t}/rows/{pk}'.format(ks=ks_name, t=table, pk=pk)
+        return self._delete(resource)

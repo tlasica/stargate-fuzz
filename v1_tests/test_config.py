@@ -10,6 +10,10 @@ class TestConfig:
 
     LOG = logging.getLogger(__name__)
 
+    default_tables_to_skip = [
+        ('system', 'prepared_statements'),  # it is changing fast, can differ between calls
+        ('system', 'local'),  # cql reports from backend, rest from stargate, but it is ignorable
+    ]
     tables_to_skip = None
 
     @classmethod
@@ -24,10 +28,19 @@ class TestConfig:
 
     @classmethod
     def _build_skip_tables_from_env(cls):
-        res = set()
+        res = set(cls.default_tables_to_skip)
         list_of_tables = os.environ.get("SKIP_TABLES", "").split(',')
         for ks, table in [x.split('.') for x in list_of_tables if x]:
             res.add((ks, table))
         cls.LOG.info("skip tables: {}".format(res))
         return res
 
+    @classmethod
+    def is_system_table(cls, keyspace, table):
+        if keyspace.startswith('system_'):
+            return True
+        if keyspace.startswith('dse_'):
+            return True
+        if keyspace.startswith('data_endpoint_auth'):
+            return True
+        return False
