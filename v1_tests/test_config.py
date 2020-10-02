@@ -37,6 +37,8 @@ class TestConfig:
 
     @classmethod
     def is_system_table(cls, keyspace, table):
+        if keyspace in ['system']:
+            return True
         if keyspace.startswith('system_'):
             return True
         if keyspace.startswith('dse_'):
