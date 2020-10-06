@@ -60,6 +60,8 @@ pytest ./test/rest/v1 -vv
 
 `stargate-fuzz` is configured via env variables:
 
+## Stargate access configuration
+
 | Variable | Description | Default value
 |----------|-------------|--------
 |`TEST_HOST`| stargate host or ip| locahost
@@ -68,17 +70,23 @@ pytest ./test/rest/v1 -vv
 |`REST_API_PORT`|port to contact for REST api|8082
 |`REST_AUTH_PORT`|port for authentication api|8081
 
+## Test configuration
 
-# Adding more tests
+`SKIP_TABLES` environmental variable can be used to let `stargate-fuzz` skip some tables and continue tests.
+Content should be comma separated list of `<keyspace>.<table>`, for example:
+```
+export SKIP_TABLES="ks1.table4,test.alamakota"
+```
+will skip `ks1.table4` and `test.alamakota`
+
+# Repo structure
 
 - `bin` scripts e.g. to populate database or run stargate from docker
 - `test` test code
   - `test/common` shared code used in tests 
   - `test/auth` authenticatin api tests
   - `test/rest/v1` REST v1 api tests
+
+Tests for new APIs should be added in the relevant subdirectories.
  
-# Issues
-
-TODO: not always stable
-TODO: SKIP_TABLES
-
+ 
