@@ -1,13 +1,16 @@
 import os
 
+from test.common.config.test_config import TestConfig
+
+
 class RESTApiConfig:
 
     def __init__(self):
-        self.host = os.environ.get('REST_API_HOST', 'localhost')
-        self.auth_api_port = int(os.environ.get('REST_API_AUTH_PORT', '8081'))
+        self.host = TestConfig.test_host()
+        self.username = TestConfig.username()
+        self.password = TestConfig.password()
+        self.auth_api_port = int(os.environ.get('REST_AUTH_PORT', '8081'))
         self.rest_api_port = int(os.environ.get('REST_API_PORT', '8082'))
-        self.username = os.environ.get('REST_API_USERNAME', 'cassandra')
-        self.password = os.environ.get('REST_API_PASSWORD', 'cassandra')
         self.api_prefix = os.environ.get('REST_API_PREFIX', '')
         if self.api_prefix and not self.api_prefix.startswith('/'):
             self.api_prefix = '/' + self.api_prefix

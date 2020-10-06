@@ -1,20 +1,23 @@
 import os
 
-from cassandra.auth import PlainTextAuthProvider
 from cassandra.cluster import Cluster
 from cassandra.policies import RoundRobinPolicy
+
+from test.common.config.test_config import TestConfig
 
 
 class CQLConfig:
     def __init__(self):
-        self.host = os.environ.get('CQL_HOST', 'localhost')
+        self.host = TestConfig.test_host()
         self.username = os.environ.get('CQL_USERNAME', 'cassandra')
         self.password = os.environ.get('CQL_PASSWORD', 'cassandra')
+
 
 class CQLConnection:
 
     def connect(self):
         config = CQLConfig()
+        # TODO: support authentication
         # auth_provider = PlainTextAuthProvider(username=config.username, password=config.password)
         # cluster = Cluster([config.host], auth_provider=auth_provider)
         cluster = Cluster([config.host],
@@ -48,6 +51,7 @@ def cql_table_pk_columns(cql_session, ks_name, table):
         return partition_key_cols, clustering_key_cols
     else:
         return None, None
+
 
 def cql_table_column(cql_session, ks_name, table, column):
     metadata = cql_table_metadata(cql_session, ks_name, table)

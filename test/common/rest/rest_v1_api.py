@@ -1,50 +1,9 @@
-from collections import namedtuple
-
 import logging
 import requests
 
+from test.common.rest.rest_util import RESTResult, build_resp_error
 
 LOG = logging.getLogger(__name__)
-
-
-RESTResult = namedtuple('RESTResult', ['ok', 'value', 'status_code', 'error', 'url'])
-
-
-class RESTAuth:
-
-    def __init__(self, config):
-        self.config = config
-        self.token = None
-
-    def authenticate(self):
-        auth_url = self.config.auth_api_url_base()
-        resp = requests.post(auth_url,
-                             json={'username': self.config.username, 'password': self.config.password})
-        self.token = resp.json().get('authToken')
-        print("authenticated with token", self.token)
-        return RESTResult(ok=resp.ok, value=self.token,
-                          status_code=resp.status_code,
-                          error=build_resp_error(resp),
-                          url=auth_url)
-
-
-    def is_authenticated(self):
-        return self.token is not None
-
-    def token(self):
-        return self.token
-
-
-
-def build_resp_error(resp):
-    if resp.ok:
-        return None
-    else:
-        return '{url} returned {status} with:\n {out}'.format(
-            url=resp.url,
-            status=resp.status_code,
-            out=resp.text
-        )
 
 
 class RESTApiV1:

@@ -1,8 +1,9 @@
 import pytest
 
-from cql_tools import CQLConnection
-from rest_api import RESTApiV1, RESTAuth
-from rest_api_config import RESTApiConfig
+from test.common.config.rest_api_config import RESTApiConfig
+from test.common.cql.cql_tools import CQLConnection
+from test.common.rest.rest_auth import RESTAuth
+from test.common.rest.rest_v1_api import RESTApiV1
 
 
 @pytest.fixture(scope="class")

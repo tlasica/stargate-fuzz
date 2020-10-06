@@ -1,6 +1,6 @@
-from cql_tools import CQLConnection
-from rest_api import RESTAuth
-from rest_api_config import RESTApiConfig
+from test.common.config.rest_api_config import RESTApiConfig
+from test.common.cql.cql_tools import CQLConnection
+from test.common.rest.rest_auth import RESTAuth
 
 
 class TestAuthentication:

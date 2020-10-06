@@ -9,12 +9,27 @@ class TestConfig:
     """
 
     LOG = logging.getLogger(__name__)
+    HOST = os.environ.get('TEST_HOST', 'localhost')
+    USERNAME = os.environ.get('TEST_USERNAME', 'cassandra')
+    PASSWORD = os.environ.get('TEST_PASSWORD', 'cassandra')
 
     default_tables_to_skip = [
         ('system', 'prepared_statements'),  # it is changing fast, can differ between calls
         ('system', 'local'),  # cql reports from backend, rest from stargate, but it is ignorable
     ]
     tables_to_skip = None
+
+    @classmethod
+    def test_host(cls):
+        return cls.HOST
+
+    @classmethod
+    def username(cls):
+        return cls.USERNAME
+
+    @classmethod
+    def password(cls):
+        return cls.PASSWORD
 
     @classmethod
     def skip_table(cls, keyspace, table):

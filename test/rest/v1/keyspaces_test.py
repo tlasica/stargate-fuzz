@@ -1,15 +1,17 @@
 import logging
 
-from cql_tools import cql_keyspaces, cql_tables, cql_table_metadata
-from fixtures import *
+from test.common.cql.cql_tools import cql_keyspaces, cql_tables, cql_table_metadata
+from test.common.test.fixtures import *
 
 
-# GET / v1 / keyspaces(io.stargate.web.resources.KeyspaceResource)
-# GET / v1 / keyspaces / {keyspaceName} / tables(io.stargate.web.resources.TableResource)
-# POST / v1 / keyspaces / {keyspaceName} / tables(io.stargate.web.resources.TableResource)
-# DELETE / v1 / keyspaces / {keyspaceName} / tables / {tableName}(io.stargate.web.resources.TableResource)
-# GET / v1 / keyspaces / {keyspaceName} / tables / {tableName}(io.stargate.web.resources.TableResource)
 class TestRestV1Keyspaces:
+    """
+    Tests if GET on existing C* tables is working correctly
+    by comparing output with metadata collected using python driver
+    # GET / v1 / keyspaces(io.stargate.web.resources.KeyspaceResource)
+    # GET / v1 / keyspaces / {keyspaceName} / tables(io.stargate.web.resources.TableResource)
+    # GET / v1 / keyspaces / {keyspaceName} / tables / {tableName}(io.stargate.web.resources.TableResource)
+    """
 
     LOG = logging.getLogger(__name__)
 
@@ -17,7 +19,7 @@ class TestRestV1Keyspaces:
         res = rest_v1.list_keyspaces()
         assert res.ok, res.error
         ks_names = set(res.value)
-        if ('stargate_system') in ks_names:  # C2-306
+        if 'stargate_system' in ks_names:  # C2-306
             ks_names.remove('stargate_system')
         return ks_names
 
@@ -53,16 +55,6 @@ class TestRestV1Keyspaces:
             assert rest_columns == cql_colums
             # TODO: for every column check definition (static and type)
 
-
         for ks in ks_names:
             for table in self._rest_tables(rest_v1, ks):
                 check(ks, table)
-
-
-
-
-
-
-
-
-
