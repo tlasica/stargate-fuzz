@@ -16,9 +16,12 @@ comparing results with same operation done via `cql`.
 # Installation
 
 `stargate-fuzz`  requires some libraries to work.
-Recommended approach to run it is to use virtual env.
+Recommended approach to run it is to use virtual env, for example using [virtualenvwrapper](https://pypi.org/project/virtualenvwrapper/).
 
-TODO: descibe how to use it, with `requirements.txt` [TODO: link] 
+```
+mkvirtualenv --python=$(which python3) stargate-fuzz
+pip install -r requrements.txt
+```
 
 # Running tests
 
@@ -35,7 +38,6 @@ Please take a look at (http://stargate.io) for more information how to run starg
 ## Step 2: populate database
 
 `stargate-fuzz` needs database under test to be populated with random model and random data. The more fancy the model is and the more data is loaded the bigger chance it will actually find an issue.
-Proposed 
 
 [scylladb/gemini fuzz tester](https://github.com/scylladb/gemini) was used with good results as a database population engine. 
 To populate SUT using `gemini` run:
